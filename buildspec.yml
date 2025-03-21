@@ -8,10 +8,14 @@ phases:
       - echo "Using Java 17"
       - java -version
       - mvn --version
+      - echo "Retrieving NVD API Key from SSM..."
+      - export NVD_API_KEY=$(aws ssm get-parameter --name "/NVD_API_KEY" --with-decryption --query "Parameter.Value" --output text)
+      
   pre_build:
     commands:
       - echo "Installing dependencies..."
       - mvn clean install
+      
   build:
     commands:
       - echo "Running SCA - OWASP Dependency Check..."
@@ -22,6 +26,7 @@ phases:
       - mvn test jacoco:report
       - echo "Running SonarQube Analysis..."
       - mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN
+      
   post_build:
     commands:
       - echo "Build and Security Analysis Completed!"
