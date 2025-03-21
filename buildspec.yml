@@ -15,7 +15,8 @@ phases:
       - echo "Installing dependencies..."
       - export JAVA_HOME="/usr/lib/jvm/java-17-amazon-corretto"
       - export PATH=$JAVA_HOME/bin:$PATH
-      - echo "JAVA_HOME is set to: $JAVA_HOME"
+      - echo "JAVA_HOME is set to: $JAVA_HOME"  # FIXED LINE
+      #- echo "JAVA_HOME is set to:$JAVA_HOME"
       - mvn clean install
 
   build:
