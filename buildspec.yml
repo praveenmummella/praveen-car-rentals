@@ -1,38 +1,44 @@
-version: 0.2
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-phases:
-  install:
-    runtime-versions:
-      java: 17
-    commands:
-      - echo "Setting JAVA_HOME and verifying Java installation..."
-      - export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
-      - export PATH=$JAVA_HOME/bin:$PATH
-      - java -version
+    <groupId>com.praveen.carrental</groupId>
+    <artifactId>car-rental-app</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
-  pre_build:
-    commands:
-      - echo "Installing dependencies..."
-      - mvn clean install
+    <name>Car Rental App</name>
 
-  build:
-    commands:
-      - echo "Running SCA - OWASP Dependency Check..."
-      - mvn org.owasp:dependency-check-maven:check
-      - echo "Building the WAR file..."
-      - mvn package
-      - echo "Running JaCoCo Code Coverage..."
-      - mvn test jacoco:report
-      - echo "Running SonarQube Analysis..."
-      - mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST_URL
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
-  post_build:
-    commands:
-      - echo "Build and Security Analysis Completed!"
+    <dependencies>
+        <!-- Jakarta Servlet API (for JSP/Servlets) -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
+        </dependency>
 
-artifacts:
-  files:
-    - target/*.war
-    - target/site/jacoco/index.html
-    - target/dependency-check-report.html
-  discard-paths: yes
+        <!-- Add any other dependencies your project requires -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
