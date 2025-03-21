@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: 17
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - mvn clean install
+  build:
+    commands:
+      - echo "Building the WAR file..."
+      - mvn package
+  post_build:
+    commands:
+      - echo "Build completed. Preparing artifact..."
+artifacts:
+  files:
+    - target/*.war
+  discard-paths: yes
