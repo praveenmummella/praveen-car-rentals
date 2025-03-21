@@ -6,7 +6,6 @@ phases:
       java: 17
   pre_build:
     commands:
-      - echo "JAVA_HOME is set to: $JAVA_HOME"
       - java -version
       - mvn --version
       - echo "Installing dependencies..."
