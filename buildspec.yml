@@ -4,10 +4,17 @@ phases:
   install:
     runtime-versions:
       java: 17
+    commands:
+      - echo "Setting JAVA_HOME and verifying Java installation..."
+      - export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))
+      - export PATH=$JAVA_HOME/bin:$PATH
+      - java -version
+
   pre_build:
     commands:
       - echo "Installing dependencies..."
       - mvn clean install
+
   build:
     commands:
       - echo "Running SCA - OWASP Dependency Check..."
@@ -17,7 +24,8 @@ phases:
       - echo "Running JaCoCo Code Coverage..."
       - mvn test jacoco:report
       - echo "Running SonarQube Analysis..."
-      - mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN
+      - mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=$SONAR_HOST_URL
+
   post_build:
     commands:
       - echo "Build and Security Analysis Completed!"
