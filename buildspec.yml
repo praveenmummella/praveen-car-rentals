@@ -4,10 +4,18 @@ phases:
   install:
     runtime-versions:
       java: 17
+    commands:
+      - echo "Installing Corretto JDK 17..."
+      - export JAVA_HOME="/usr/lib/jvm/java-17-amazon-corretto"
+      - export PATH=$JAVA_HOME/bin:$PATH
+      - java -version
+      - mvn -version
+
   pre_build:
     commands:
       - echo "Installing dependencies..."
       - mvn clean install
+
   build:
     commands:
       - echo "Running SCA - OWASP Dependency Check..."
@@ -18,6 +26,7 @@ phases:
       - mvn test jacoco:report
       - echo "Running SonarQube Analysis..."
       - mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN
+
   post_build:
     commands:
       - echo "Build and Security Analysis Completed!"
