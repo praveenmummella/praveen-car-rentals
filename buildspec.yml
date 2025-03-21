@@ -1,44 +1,30 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+version: 0.2
 
-    <groupId>com.praveen.carrental</groupId>
-    <artifactId>car-rental-app</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+phases:
+  install:
+    runtime-versions:
+      java: 17
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - mvn clean install
+  build:
+    commands:
+      - echo "Running SCA - OWASP Dependency Check..."
+      - mvn org.owasp:dependency-check-maven:check
+      - echo "Building the WAR file..."
+      - mvn package
+      - echo "Running JaCoCo Code Coverage..."
+      - mvn test jacoco:report
+      - echo "Running SonarQube Analysis..."
+      - mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN
+  post_build:
+    commands:
+      - echo "Build and Security Analysis Completed!"
 
-    <name>Car Rental App</name>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
-
-    <dependencies>
-        <!-- Jakarta Servlet API (for JSP/Servlets) -->
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Add any other dependencies your project requires -->
-    </dependencies>
-
-    <build>
-        <plugins>
-            <!-- Compiler Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-</project>
+artifacts:
+  files:
+    - target/*.war
+    - target/site/jacoco/index.html
+    - target/dependency-check-report.html
+  discard-paths: yes
