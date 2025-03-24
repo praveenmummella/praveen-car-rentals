@@ -1,20 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Welcome to Praveen Car Rentals!</title>
+    <title>Praveen Car Rentals</title>
 </head>
 <body>
-    <h1>Welcome to Praveen Car Rentals!</h1>
-    <p>Available Features:</p>
-    <ul>
-        <li>Browse and Rent Cars</li>
-        <li>View Car Details</li>
-        <li>Book Car Rentals Online</li>
-    </ul>
-    <form action="home" method="get">
-        <label>Pick-Up Location: <input type="text" name="location" /></label>
-        <label>Pick-Up Date: <input type="date" name="date" /></label>
-        <button type="submit">Search Cars</button>
-    </form>
+    <h1>Welcome to Praveen Car Rentals</h1>
+    <p><a href="home">Go to HomeServlet</a></p>
 </body>
 </html>
