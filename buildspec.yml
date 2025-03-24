@@ -3,19 +3,16 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto17
-    commands:
-      - echo "Using Java 17"
-      - java -version
-      - mvn --version
-      - echo "Retrieving NVD API Key from SSM..."
-      - export NVD_API_KEY=$(aws ssm get-parameter --name "/NVD_API_KEY" --with-decryption --query "Parameter.Value" --output text)
-      
+      java: 17
   pre_build:
     commands:
+      - echo "Setting JAVA_HOME explicitly..."
+      - export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+      - echo "JAVA_HOME is set to: $JAVA_HOME"
+      - java -version
+      - mvn --version
       - echo "Installing dependencies..."
       - mvn clean install
-      
   build:
     commands:
       - echo "Running SCA - OWASP Dependency Check..."
@@ -26,7 +23,6 @@ phases:
       - mvn test jacoco:report
       - echo "Running SonarQube Analysis..."
       - mvn sonar:sonar -Dsonar.token=$SONAR_TOKEN
-      
   post_build:
     commands:
       - echo "Build and Security Analysis Completed!"
