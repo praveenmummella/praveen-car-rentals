@@ -3,14 +3,13 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: 17
-  pre_build:
+      java: corretto17
     commands:
-      - echo "Setting JAVA_HOME explicitly..."
-      - export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-      - echo "JAVA_HOME is set to: $JAVA_HOME"
+      - echo "Using Java 17"
       - java -version
       - mvn --version
+  pre_build:
+    commands:
       - echo "Installing dependencies..."
       - mvn clean install
   build:
