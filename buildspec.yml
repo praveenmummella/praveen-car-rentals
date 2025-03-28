@@ -7,22 +7,25 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - mvn clean install -DskipTests
+
   build:
     commands:
-      - echo "Running tests and code analysis..."
-      - mvn test
-      - mvn jacoco:report
+      - echo "Running tests with JaCoCo and performing security analysis..."
+      - mvn verify   # Runs tests and generates jacoco.exec
+      - mvn jacoco:report   # Generates the HTML coverage report
       - mvn dependency-check:check
       - mvn sonar:sonar \
           -Dsonar.organization=<your-sonarcloud-organization> \
           -Dsonar.projectKey=<your-sonarcloud-project-key> \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=$SONAR_TOKEN
+
   post_build:
     commands:
       - echo "Build and Security Analysis Completed!"
+
 artifacts:
   files:
     - target/*.war
-    - target/site/jacoco/index.html
+    - target/site/jacoco/**/*
     - target/dependency-check-report.html
